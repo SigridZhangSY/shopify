@@ -5,7 +5,7 @@
 - 电商系统，功能包括商品的上架、库存、定价管理，订单生成、支付、配送，退款（可对订单部分退款）。
 
 
-![snap](https://github.com/SigridZhangSY/shopify/blob/master/model.JPEG?raw=true)
+![snap](https://github.com/SigridZhangSY/shopify/blob/master/chore/model.JPEG?raw=true)
 
 ### Tasking `1770`
 
