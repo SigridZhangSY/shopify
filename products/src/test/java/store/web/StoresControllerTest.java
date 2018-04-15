@@ -10,10 +10,11 @@ import store.domain.Store;
 import store.repository.StoreRepository;
 import store.support.ApiUnitTest;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +56,6 @@ public class StoresControllerTest extends ApiUnitTest {
     public void should_400_when_create_store_with_invalid_parameter() throws Exception {
         Map<String, Object> storeParam = new HashMap<>();
 
-
         given()
                 .accept(ContentType.JSON)
                 .contentType(ContentType.JSON)
@@ -64,5 +64,24 @@ public class StoresControllerTest extends ApiUnitTest {
                 .post("/stores")
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    public void should_200_when_get_store_list() throws Exception {
+        Store store = new Store("owner-1");
+        ArrayList<Store> stores = new ArrayList<>();
+        stores.add(store);
+
+        when(mockStoreRepository.findAll()).thenReturn(stores);
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/stores")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("ownerId", hasItems(store.getOwnerId()))
+                .body("id", hasItem(nullValue()))
+                .body("url", hasItems("/stores/" + store.getId()));
     }
 }

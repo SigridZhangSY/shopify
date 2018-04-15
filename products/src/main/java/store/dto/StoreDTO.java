@@ -1,28 +1,12 @@
-package store.domain;
+package store.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.UUID;
-
-@Entity
-@Table(name = "stores")
-public class Store {
-
-    @Id
+public class StoreDTO {
+    @JsonIgnore
     private String id;
-
     private String ownerId;
-
-    public Store(String ownerId) {
-        this.id = UUID.randomUUID().toString().replace("-", "");
-        this.ownerId = ownerId;
-    }
-
-    public Store() {
-    }
+    private String url;
 
     public void setId(String id) {
         this.id = id;
@@ -30,6 +14,15 @@ public class Store {
 
     public String getId() {
         return id;
+    }
+
+
+    public String getUrl() {
+        return "/stores/" + id;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getOwnerId() {

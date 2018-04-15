@@ -1,17 +1,18 @@
 package store.web;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import store.domain.Store;
+import store.dto.StoreDTO;
 import store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,6 +24,9 @@ public class StoresController {
 
     @Autowired
     private StoreRepository storeRepository;
+
+    private static final ModelMapper modelMapper = new ModelMapper();
+
 
     @ResponseBody
     @RequestMapping(method = POST, consumes = "application/json")
@@ -41,5 +45,17 @@ public class StoresController {
                 .buildAndExpand(fetch.getId()).toUri();
 
         return ResponseEntity.created(uri).build();
+    }
+
+    @ResponseBody
+    @GetMapping
+    public List<StoreDTO> getList() {
+        List<Store> stores = storeRepository.findAll();
+        List<StoreDTO> storeDTOS = new ArrayList<>();
+        stores.forEach((store -> {
+            StoreDTO storeDTO = modelMapper.map(store, StoreDTO.class);
+            storeDTOS.add(storeDTO);
+        }));
+        return storeDTOS;
     }
 }
