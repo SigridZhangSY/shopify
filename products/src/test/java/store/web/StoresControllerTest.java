@@ -50,4 +50,19 @@ public class StoresControllerTest extends ApiUnitTest {
                 .statusCode(HttpStatus.SC_CREATED)
                 .headers(expectHeaders);
     }
+
+    @Test
+    public void should_400_when_create_store_with_invalid_parameter() throws Exception {
+        Map<String, Object> storeParam = new HashMap<>();
+
+
+        given()
+                .accept(ContentType.JSON)
+                .contentType(ContentType.JSON)
+                .body(storeParam)
+                .when()
+                .post("/stores")
+                .then()
+                .statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
 }

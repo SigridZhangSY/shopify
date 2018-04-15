@@ -1,5 +1,6 @@
 package store.web;
 
+import org.springframework.http.HttpStatus;
 import store.domain.Store;
 import store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class StoresController {
     @ResponseBody
     @RequestMapping(method = POST, consumes = "application/json")
     public ResponseEntity<?> create(@RequestBody Map<String, Object> payload) {
+
+        if(!payload.containsKey("ownerId")) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 
         Store store = new Store(payload.get("ownerId").toString());
 
