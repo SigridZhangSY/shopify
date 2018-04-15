@@ -31,7 +31,7 @@
 
 - /stores/{sid}/products     post`15`	   get`10`    
 - /products/{pid}     get`20`   
-- /stores/{sid}/products/{pid}      put `10`
+- /stores/{sid}/products/{pid}      put `10`   get
 
 — Dockerize
 

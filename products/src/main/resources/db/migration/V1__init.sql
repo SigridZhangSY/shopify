@@ -1,0 +1,4 @@
+CREATE TABLE stores (
+  id VARCHAR(255) PRIMARY KEY,
+  owner_id VARCHAR(255) NOT NULL
+);
