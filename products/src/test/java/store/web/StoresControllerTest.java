@@ -66,22 +66,4 @@ public class StoresControllerTest extends ApiUnitTest {
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
     }
-
-    @Test
-    public void should_200_when_get_store_list() throws Exception {
-        Store store = new Store("owner-1", "bookStore");
-        ArrayList<Store> stores = new ArrayList<>();
-        stores.add(store);
-
-        when(mockStoreRepository.findAll()).thenReturn(stores);
-
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .get("/stores/fmdfnm/products")
-                .then()
-                .statusCode(HttpStatus.SC_OK)
-                .body("items.self", hasItems("/stores/" + store.getId()))
-                .body("items.products", hasItems("/stores/" + store.getId() + "/products"));
-    }
 }
