@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -77,6 +78,24 @@ public class ProductsControllerTest extends ApiUnitTest {
                 .get("/stores/" + storeId + "/products")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("items.self", hasItems("/stores/" + store.getId() + "/products/" + product.getId()));
+                .body("items.self", hasItems("/products/" + product.getId()));
+    }
+
+    @Test
+    public void should_200_when_get_product_by_id() throws Exception {
+        String storeId = "storeId";
+        Product product = new Product("Detective Fic", storeId);
+
+        when(mockProductRepository.findById(eq(product.getId()))).thenReturn(Optional.of(product));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/products/" + product.getId())
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("description", equalTo("Detective Fic"))
+                .body("links.self.href", equalTo("/products/" + product.getId()))
+                .body("links.store.href", equalTo("/stores/" + storeId));
     }
 }

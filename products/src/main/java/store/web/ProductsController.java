@@ -67,4 +67,15 @@ public class ProductsController {
 
         return new Page(productDTOList);
     }
+
+    @ResponseBody
+    @GetMapping(value = "/products/{productId}", produces = "application/json")
+    public ProductDTO getProduct(@PathVariable String productId) {
+        Optional<Product> product = productRepository.findById(productId);
+        if (product.isPresent()) {
+            return modelMapper.map(product.get(), ProductDTO.class);
+        } else {
+            throw new NotFoundException();
+        }
+    }
 }

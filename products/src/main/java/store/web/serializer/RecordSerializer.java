@@ -18,8 +18,6 @@ public class RecordSerializer extends StdSerializer<Record> {
 
     @Override
     public void serialize(Record value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeStartObject();
         gen.writeObject(value.toJson());
-        gen.writeEndObject();
     }
 }

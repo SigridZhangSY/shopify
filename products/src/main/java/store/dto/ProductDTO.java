@@ -2,6 +2,7 @@ package store.dto;
 
 import store.web.serializer.Record;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class ProductDTO implements Record {
     @Override
     public Map<String, Object> toRefJson() {
         return new HashMap<String, Object>(){{
-            put("self", "/stores/" + storeId + "/products/" + id);
+            put("self", "/products/" + id);
         }};
     }
 
@@ -24,7 +25,15 @@ public class ProductDTO implements Record {
     public Map<String, Object> toJson() {
         return new HashMap<String, Object>(){{
             put("description", description);
-            put("self", "/stores/" + storeId + "/products/" + id);
+            put("links", new HashMap<String, Object>(){{
+                put("self", new HashMap<String, Object>(){{
+                    put("href", "/products/" + id);
+                }});
+                put("store", new HashMap<String, Object>(){{
+                    put("href", "/stores/" + storeId);
+                }});
+            }});
+
         }};
     }
 

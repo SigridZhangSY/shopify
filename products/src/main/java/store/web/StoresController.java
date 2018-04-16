@@ -27,7 +27,6 @@ public class StoresController {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
-
     @ResponseBody
     @RequestMapping(method = POST, consumes = "application/json")
     public ResponseEntity<?> create(@RequestBody Map<String, Object> payload) {
