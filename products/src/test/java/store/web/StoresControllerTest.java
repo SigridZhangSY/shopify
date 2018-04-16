@@ -36,7 +36,8 @@ public class StoresControllerTest extends ApiUnitTest {
     public void should_return_201_when_create_store() throws Exception {
         Map<String, Object> storeParam = new HashMap<>();
         storeParam.put("ownerId", "owner-id");
-        Store mockStore = new Store("owner-id");
+        storeParam.put("name", "bookStore");
+        Store mockStore = new Store("owner-id", "bookStore");
         Map expectHeaders = new HashMap();
         expectHeaders.put("Location", containsString("/stores/" + mockStore.getId()));
         when(mockStoreRepository.save(any())).thenReturn(mockStore);
@@ -68,7 +69,7 @@ public class StoresControllerTest extends ApiUnitTest {
 
     @Test
     public void should_200_when_get_store_list() throws Exception {
-        Store store = new Store("owner-1");
+        Store store = new Store("owner-1", "bookStore");
         ArrayList<Store> stores = new ArrayList<>();
         stores.add(store);
 

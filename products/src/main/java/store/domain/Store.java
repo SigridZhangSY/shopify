@@ -3,7 +3,6 @@ package store.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -15,9 +14,12 @@ public class Store {
 
     private String ownerId;
 
-    public Store(String ownerId) {
+    private String storeName;
+
+    public Store(String ownerId, String storeName) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.ownerId = ownerId;
+        this.storeName = storeName;
     }
 
     public Store() {
@@ -37,5 +39,13 @@ public class Store {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 }

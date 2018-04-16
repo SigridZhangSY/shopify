@@ -33,11 +33,11 @@ public class StoresController {
     @RequestMapping(method = POST, consumes = "application/json")
     public ResponseEntity<?> create(@RequestBody Map<String, Object> payload) {
 
-        if(!payload.containsKey("ownerId")) {
+        if(!payload.containsKey("ownerId") || !payload.containsKey("name")) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
-        Store store = new Store(payload.get("ownerId").toString());
+        Store store = new Store(payload.get("ownerId").toString(), payload.get("name").toString());
 
         Store fetch = storeRepository.save(store);
 

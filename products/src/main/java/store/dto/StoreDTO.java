@@ -8,7 +8,7 @@ import java.util.Map;
 public class StoreDTO implements Record{
     private String id;
     private String ownerId;
-    private String url;
+    private String storeName;
 
     public void setId(String id) {
         this.id = id;
@@ -19,20 +19,20 @@ public class StoreDTO implements Record{
     }
 
 
-    public String getUrl() {
-        return "/stores/" + id;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getOwnerId() {
         return ownerId;
     }
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
     }
 
     @Override
@@ -43,6 +43,7 @@ public class StoreDTO implements Record{
     @Override
     public Map<String, Object> toJson() {
         return new HashMap<String, Object>(){{
+            put("name", storeName);
             put("self", "/stores/" + id);
             put("products", "/stores/" + id +"/products");
         }};
