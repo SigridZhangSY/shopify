@@ -2,19 +2,19 @@ version: '2.0'
 services:
   db:
     image: mysql
-    container_name: template_spring_boot_db
+    container_name: products_db
     environment:
       MYSQL_ROOT_PASSWORD: "mysql"
       MYSQL_USER: "mysql"
       MYSQL_PASSWORD: "mysql"
-      MYSQL_DATABASE: "spring_template"
+      MYSQL_DATABASE: "shopify"
     volumes:
       - ./src/main/resources/db/migration:/docker-entrypoint-initdb.d/:ro
     expose:
       - 3306
   web:
-    image: spring-boot-template:latest
-    container_name: template-spring-web
+    image: products_image:latest
+    container_name: products-web
     depends_on:
       - db
     ports:
@@ -25,5 +25,5 @@ services:
       DB_MYSQL_USER: "mysql"
       DB_MYSQL_PASS: "mysql"
       STAGE: "prod"
-      DB_ON_CREATE_DB: "spring_template"
+      DB_ON_CREATE_DB: "shopify"
 
