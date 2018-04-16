@@ -13,9 +13,12 @@ public class Product {
 
     private String description;
 
-    public Product(String description) {
+    private String storeId;
+
+    public Product(String description, String storeId) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.description = description;
+        this.storeId = storeId;
     }
 
     public Product() {
@@ -31,5 +34,13 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
     }
 }

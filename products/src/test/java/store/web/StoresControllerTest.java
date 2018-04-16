@@ -78,7 +78,7 @@ public class StoresControllerTest extends ApiUnitTest {
         given()
                 .contentType(ContentType.JSON)
                 .when()
-                .get("/stores")
+                .get("/stores/fmdfnm/products")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body("items.self", hasItems("/stores/" + store.getId()))

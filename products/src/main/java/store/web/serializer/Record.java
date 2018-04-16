@@ -1,4 +1,4 @@
-package store.web.handler;
+package store.web.serializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 

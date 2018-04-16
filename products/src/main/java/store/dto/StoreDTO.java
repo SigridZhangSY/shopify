@@ -1,6 +1,6 @@
 package store.dto;
 
-import store.web.handler.Record;
+import store.web.serializer.Record;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -9,13 +9,12 @@ import store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import store.web.handler.Page;
+import store.web.serializer.Page;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -49,7 +48,7 @@ public class StoresController {
     }
 
     @ResponseBody
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public Page<StoreDTO> getList() {
         List<Store> stores = storeRepository.findAll();
         List<StoreDTO> storeDTOS = new ArrayList<>();
