@@ -1,9 +1,11 @@
 package store.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import store.web.handler.Record;
 
-public class StoreDTO {
-    @JsonIgnore
+import java.util.HashMap;
+import java.util.Map;
+
+public class StoreDTO implements Record{
     private String id;
     private String ownerId;
     private String url;
@@ -31,5 +33,18 @@ public class StoreDTO {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    @Override
+    public Map<String, Object> toRefJson() {
+        return toJson();
+    }
+
+    @Override
+    public Map<String, Object> toJson() {
+        return new HashMap<String, Object>(){{
+            put("self", "/stores/" + id);
+            put("products", "/stores/" + id +"/products");
+        }};
     }
 }

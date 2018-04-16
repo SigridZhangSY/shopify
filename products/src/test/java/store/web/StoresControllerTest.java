@@ -80,8 +80,7 @@ public class StoresControllerTest extends ApiUnitTest {
                 .get("/stores")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("ownerId", hasItems(store.getOwnerId()))
-                .body("id", hasItem(nullValue()))
-                .body("url", hasItems("/stores/" + store.getId()));
+                .body("items.self", hasItems("/stores/" + store.getId()))
+                .body("items.products", hasItems("/stores/" + store.getId() + "/products"));
     }
 }

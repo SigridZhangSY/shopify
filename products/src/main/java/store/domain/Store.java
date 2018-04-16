@@ -1,10 +1,9 @@
 package store.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity

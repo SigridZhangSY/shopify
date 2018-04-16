@@ -9,6 +9,7 @@ import store.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import store.web.handler.Page;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -49,13 +50,13 @@ public class StoresController {
 
     @ResponseBody
     @GetMapping
-    public List<StoreDTO> getList() {
+    public Page<StoreDTO> getList() {
         List<Store> stores = storeRepository.findAll();
         List<StoreDTO> storeDTOS = new ArrayList<>();
         stores.forEach((store -> {
             StoreDTO storeDTO = modelMapper.map(store, StoreDTO.class);
             storeDTOS.add(storeDTO);
         }));
-        return storeDTOS;
+        return new Page(storeDTOS);
     }
 }
