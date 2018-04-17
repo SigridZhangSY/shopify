@@ -1,7 +1,6 @@
-CREATE TABLE s_users (
+CREATE TABLE prices (
   id INT PRIMARY KEY AUTO_INCREMENT,
-  first_name VARCHAR(255) NOT NULL,
-  last_name varchar(255) NOT NULL
+  product_id VARCHAR(255) NOT NULL,
+  price_value FLOAT NOT NULL,
+  create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO s_users (first_name, last_name) values ('Sherlock', 'Holmes');

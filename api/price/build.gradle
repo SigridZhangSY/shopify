@@ -29,7 +29,7 @@ flyway {
             "jdbc:mysql://%s:%s/%s?user=%s&password=%s&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull",
             currentEnv.getOrDefault("DB_HOST", "localhost"),
             currentEnv.getOrDefault("DB_PORT", 3306),
-            currentEnv.getOrDefault("DB_ON_CREATE_DB", "spring_template"),
+            currentEnv.getOrDefault("DB_ON_CREATE_DB", "shopify"),
             currentEnv.getOrDefault("DB_MYSQL_USER", "mysql"),
             currentEnv.getOrDefault("DB_MYSQL_PASS", "mysql"))
 }
@@ -61,5 +61,6 @@ dependencies {
 
 //    compile 'org.flywaydb:flyway-core'
     testCompile 'io.rest-assured:spring-mock-mvc'
+    testCompile 'io.rest-assured:rest-assured'
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

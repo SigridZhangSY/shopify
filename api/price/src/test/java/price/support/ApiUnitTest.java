@@ -1,6 +1,6 @@
-package hello.support;
+package price.support;
 
-import hello.ExceptionHandlers;
+import price.ExceptionHandlers;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

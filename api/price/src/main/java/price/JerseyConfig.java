@@ -1,4 +1,4 @@
-package hello;
+package price;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.stereotype.Component;
@@ -10,7 +10,7 @@ public class JerseyConfig  extends ResourceConfig {
 
         //        register(UsersResource.class);
 //        配置扫描的restful package.
-        packages("hello.web.rest");
+        packages("price.web.rest");
 
     }
 }
