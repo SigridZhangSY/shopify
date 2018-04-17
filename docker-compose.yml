@@ -1,0 +1,39 @@
+version: '2.0'
+services:
+  eureka_server:
+    image: eureka_server_image
+    container_name: eureka
+    expose:
+      - 8761
+    ports:
+      - 8762:8761
+  products_db:
+    image: mysql
+    container_name: products-db
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysql"
+      MYSQL_USER: "mysql"
+      MYSQL_PASSWORD: "mysql"
+      MYSQL_DATABASE: "shopify"
+    volumes:
+      - ./src/main/resources/db/migration:/docker-entrypoint-initdb.d/:ro
+    expose:
+      - 3306
+  products_web:
+    image: products_image:latest
+    container_name: products-web
+    depends_on:
+      - products_db
+      - eureka_server
+    ports:
+     - 8888:8081
+    environment:
+      DB_HOST: products-db
+      DB_PORT: "3306"
+      DB_MYSQL_USER: "mysql"
+      DB_MYSQL_PASS: "mysql"
+      STAGE: "prod"
+      DB_ON_CREATE_DB: "shopify"
+      SERVICE_NAME: "products-service"
+      EUREKA_HOST: eureka
+      EUREKA_PORT: "8761"

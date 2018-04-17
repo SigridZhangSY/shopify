@@ -1,9 +1,6 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven {
-            url "https://repo.spring.io/libs-milestone"
-        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.0.RELEASE")
@@ -16,6 +13,12 @@ apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.flywaydb.flyway'
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.M9'
+    }
+}
 
 def currentEnv = System.getenv()
 
@@ -37,6 +40,9 @@ bootJar {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://repo.spring.io/libs-milestone'
+    }
 }
 
 sourceCompatibility = 1.8
@@ -48,6 +54,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-jdbc")
     compile 'mysql:mysql-connector-java'
     compile 'org.modelmapper:modelmapper:1.1.0'
+    compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
 //    compile 'org.flywaydb:flyway-core'
     testCompile 'io.rest-assured:spring-mock-mvc'
