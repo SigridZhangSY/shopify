@@ -1,5 +1,6 @@
 package price.web.rest;
 
+import price.depend.ProductClient;
 import price.domain.Price;
 import price.repository.PriceRepository;
 import price.support.ApiTest;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
@@ -22,6 +24,9 @@ public class PricesResourceTest extends ApiTest {
     @MockBean
     private PriceRepository mockPriceRepository;
 
+    @MockBean
+    private ProductClient mockProductClient;
+
     @Test
     public void should_201_when_create_price() throws Exception {
         Map<String, Object> priceMap = TestHelper.priceMap(20.0f);
@@ -29,7 +34,7 @@ public class PricesResourceTest extends ApiTest {
         String productId = "product-id";
         Price price = new Price(productId, 20.0f);
         when(mockPriceRepository.save(any())).thenReturn(price);
-
+        when(mockProductClient.getProduct(eq(productId))).thenReturn(new HashMap());
         given()
                 .port(port)
                 .accept(ContentType.JSON)

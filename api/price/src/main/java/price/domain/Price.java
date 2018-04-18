@@ -1,5 +1,6 @@
 package price.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -16,12 +17,16 @@ public class Price {
 
     private float priceValue;
 
+    @Column(name = "create_at",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Date createdAt;
 
     public Price(String productId, float priceValue) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.productId = productId;
         this.priceValue = priceValue;
+    }
+
+    public Price() {
     }
 
     public String getId() {
