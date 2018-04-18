@@ -20,12 +20,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
@@ -89,5 +85,39 @@ public class PricesResourceTest extends ApiTest {
                 .statusCode(HttpStatus.SC_OK)
                 .body("items.value", hasItems(20.0f))
                 .body("items.createdAt", hasItems(notNullValue()));
+    }
+
+    @Test
+    public void should_200_when_get_product_current_price() throws Exception {
+        String productId = "product-id";
+        Price price = new Price(productId, 20.0f, new Timestamp(System.currentTimeMillis()));
+
+        when(mockProductClient.getProduct(eq(productId))).thenReturn(new HashMap());
+        when(mockPriceRepository.findTopByProductIdOrderByCreatedAtDesc(productId)).thenReturn(Optional.of(price));
+
+        given()
+                .port(port)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/products/" + productId + "/current-price")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("value", is(20.0f))
+                .body("createdAt", notNullValue());
+    }
+
+    @Test
+    public void should_404_when_get_current_price_of_product_without_price() throws Exception {
+        String productId = "product-id";
+
+        when(mockPriceRepository.findTopByProductIdOrderByCreatedAtDesc(productId)).thenReturn(Optional.empty());
+
+        given()
+                .port(port)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/products/" + productId + "/current-price")
+                .then()
+                .statusCode(HttpStatus.SC_NOT_FOUND);
     }
 }

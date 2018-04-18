@@ -1,5 +1,6 @@
 package price.web.rest;
 
+import jdk.nashorn.internal.runtime.options.Option;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import price.domain.Price;
@@ -46,6 +47,14 @@ public class PriceListResource {
         return new Page(priceList);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("current-price")
+    public Price getCurrentPrice() {
+        return priceRepository
+                .findTopByProductIdOrderByCreatedAtDesc(productId)
+                .orElseThrow(() -> new NotFoundException());
+    }
 
     public void setProductId(String productId) {
         this.productId = productId;
