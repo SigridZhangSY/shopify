@@ -51,7 +51,6 @@ public class PricesResourceTest extends ApiTest {
     public void should_400_when_create_price_with_invalid_parameter() throws Exception {
         String productId = "product-id";
         Price price = new Price(productId, 20.0f);
-        when(mockPriceRepository.save(any())).thenReturn(price);
 
         given()
                 .port(port)
