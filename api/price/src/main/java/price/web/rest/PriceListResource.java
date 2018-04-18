@@ -1,48 +1,53 @@
 package price.web.rest;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import price.depend.ProductClient;
 import price.domain.Price;
 import price.repository.PriceRepository;
-import org.springframework.stereotype.Component;
 import price.web.Routes;
+import price.web.serializer.Page;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Map;
 
-@Component
-@Path("products/{product-id}")
-public class PricesResource {
-
-
-    @Autowired
-    private ProductClient productClient;
-
+public class PriceListResource {
     @Autowired
     private PriceRepository priceRepository;
 
     @Autowired
     private Routes routes;
 
+    private String productId;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("price-list")
-    public Response createPrice(Map<String, Object> info,
-                                @PathParam("product-id") String productId) {
+    public Response createPrice(Map<String, Object> info) {
         if(!info.containsKey("priceValue")) {
             throw new BadRequestException();
         }
-
-        //todo: customized feign exception handler
-        Map product = productClient.getProduct(productId);
 
         Float priceValue = Float.valueOf(info.get("priceValue").toString());
         Price price = new Price(productId, priceValue);
         Price fetch = priceRepository.save(price);
 
         return Response.status(201).location(routes.priceUrl(fetch)).build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("price-list")
+    public Page<Price> getPriceList() {
+        List<Price> priceList = priceRepository.findByProductId(productId);
+
+        return new Page(priceList);
+    }
+
+
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 }

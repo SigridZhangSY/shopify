@@ -1,15 +1,17 @@
 package price.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import price.web.serializer.Record;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
 @Table(name = "prices")
-public class Price {
+public class Price implements Record{
     @Id
     private String id;
 
@@ -17,13 +19,20 @@ public class Price {
 
     private float priceValue;
 
-    @Column(name = "create_at",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    private Date createdAt;
+    @Column(name = "created_at",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private Timestamp createdAt;
 
     public Price(String productId, float priceValue) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.productId = productId;
         this.priceValue = priceValue;
+    }
+
+    public Price(String productId, float priceValue, Timestamp createdAt) {
+        this.id = UUID.randomUUID().toString().replace("-", "");
+        this.productId = productId;
+        this.priceValue = priceValue;
+        this.createdAt = createdAt;
     }
 
     public Price() {
@@ -53,11 +62,25 @@ public class Price {
         this.priceValue = priceValue;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
+    }
+
+
+    @Override
+    public Map<String, Object> toRefJson() {
+        return toJson();
+    }
+
+    @Override
+    public Map<String, Object> toJson() {
+        return new HashMap<String, Object>(){{
+            put("value", priceValue);
+            put("createdAt", createdAt);
+        }};
     }
 }

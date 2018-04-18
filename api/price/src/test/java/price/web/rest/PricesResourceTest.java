@@ -1,5 +1,7 @@
 package price.web.rest;
 
+import com.google.gson.JsonObject;
+import io.restassured.RestAssured;
 import price.depend.ProductClient;
 import price.domain.Price;
 import price.repository.PriceRepository;
@@ -10,11 +12,19 @@ import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static io.restassured.config.JsonConfig.jsonConfig;
+import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
@@ -61,5 +71,23 @@ public class PricesResourceTest extends ApiTest {
                 .post("/products/" +  productId +"/price-list")
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST);
+    }
+
+    @Test
+    public void should_200_when_get_price_list_of_product() throws Exception {
+        String productId = "product-id";
+        Price price = new Price(productId, 20.0f, new Timestamp(System.currentTimeMillis()));
+        when(mockPriceRepository.findByProductId(eq(productId)))
+                .thenReturn(new ArrayList<Price>(){{add(price);}});
+        when(mockProductClient.getProduct(eq(productId))).thenReturn(new HashMap());
+        given()
+                .port(port)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/products/" + productId + "/price-list")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("items.value", hasItems(20.0f))
+                .body("items.createdAt", hasItems(notNullValue()));
     }
 }
