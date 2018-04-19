@@ -1,10 +1,8 @@
 package price.web.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import price.depend.ProductClient;
-import price.repository.PriceRepository;
+import price.depend.ProductsClient;
 import org.springframework.stereotype.Component;
-import price.web.Routes;
 
 import javax.ws.rs.*;
 import javax.ws.rs.container.ResourceContext;
@@ -16,7 +14,7 @@ import java.util.Map;
 public class ProductsResource {
 
     @Autowired
-    private ProductClient productClient;
+    private ProductsClient productsClient;
 
     @Context
     private ResourceContext resourceContext;
@@ -24,7 +22,7 @@ public class ProductsResource {
     @Path("{product-id}")
     public PriceListResource getPriceListResource(@PathParam("product-id") String productId) {
         //todo: customized feign exception handler
-        Map product = productClient.getProduct(productId);
+        Map product = productsClient.getProduct(productId);
         PriceListResource priceListResource = resourceContext.getResource(PriceListResource.class);
         priceListResource.setProductId(productId);
         return priceListResource;

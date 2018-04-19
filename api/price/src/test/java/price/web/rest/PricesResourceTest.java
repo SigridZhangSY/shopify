@@ -1,8 +1,6 @@
 package price.web.rest;
 
-import com.google.gson.JsonObject;
-import io.restassured.RestAssured;
-import price.depend.ProductClient;
+import price.depend.ProductsClient;
 import price.domain.Price;
 import price.repository.PriceRepository;
 import price.support.ApiTest;
@@ -12,8 +10,6 @@ import org.apache.http.HttpStatus;
 import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static io.restassured.config.JsonConfig.jsonConfig;
-import static io.restassured.path.json.config.JsonPathConfig.NumberReturnType.BIG_DECIMAL;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +27,7 @@ public class PricesResourceTest extends ApiTest {
     private PriceRepository mockPriceRepository;
 
     @MockBean
-    private ProductClient mockProductClient;
+    private ProductsClient mockProductsClient;
 
     @Test
     public void should_201_when_create_price() throws Exception {
@@ -40,7 +36,7 @@ public class PricesResourceTest extends ApiTest {
         String productId = "product-id";
         Price price = new Price(productId, 20.0f);
         when(mockPriceRepository.save(any())).thenReturn(price);
-        when(mockProductClient.getProduct(eq(productId))).thenReturn(new HashMap());
+        when(mockProductsClient.getProduct(eq(productId))).thenReturn(new HashMap());
         given()
                 .port(port)
                 .accept(ContentType.JSON)
@@ -75,7 +71,7 @@ public class PricesResourceTest extends ApiTest {
         Price price = new Price(productId, 20.0f, new Timestamp(System.currentTimeMillis()));
         when(mockPriceRepository.findByProductId(eq(productId)))
                 .thenReturn(new ArrayList<Price>(){{add(price);}});
-        when(mockProductClient.getProduct(eq(productId))).thenReturn(new HashMap());
+        when(mockProductsClient.getProduct(eq(productId))).thenReturn(new HashMap());
         given()
                 .port(port)
                 .contentType(ContentType.JSON)
@@ -92,7 +88,7 @@ public class PricesResourceTest extends ApiTest {
         String productId = "product-id";
         Price price = new Price(productId, 20.0f, new Timestamp(System.currentTimeMillis()));
 
-        when(mockProductClient.getProduct(eq(productId))).thenReturn(new HashMap());
+        when(mockProductsClient.getProduct(eq(productId))).thenReturn(new HashMap());
         when(mockPriceRepository.findTopByProductIdOrderByCreatedAtDesc(productId)).thenReturn(Optional.of(price));
 
         given()

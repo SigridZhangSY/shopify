@@ -35,7 +35,7 @@ flyway {
 }
 
 bootJar {
-    baseName = 'spring-boot-template'
+    baseName = 'price'
     version =  '0.1.0'
 }
 
