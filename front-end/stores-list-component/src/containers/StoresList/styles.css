@@ -1,0 +1,38 @@
+.stores_list_wrapper {
+  padding: 10px;
+}
+
+.stores_list_title {
+  font-family: 'PT Sans Caption', Helvetica, Arial, sans-serif;
+  font-size: 70px;
+  display: flex;
+  justify-content: center;
+}
+
+.stores_list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  border: solid #025aa575 1px;
+  border-radius: 5px;
+  width: 500px;
+  margin: 0 auto;
+}
+
+.store_item {
+  border-bottom: solid #025aa575 1px;
+}
+
+.store_item:hover {
+  background: #f5f5f5;
+}
+
+.store_item:last-child {
+  border-bottom: none;
+}
+
+.store_item p {
+  font-family: 'PT Sans Caption', Helvetica, Arial, sans-serif;
+  font-size: 30px;
+  margin: 0 50px;
+}
