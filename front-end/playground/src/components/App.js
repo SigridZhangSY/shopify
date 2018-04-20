@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import StoreList from '../containers/StoresList';
-import { Button, StoreList } from 'component-lib';
+import { Button, StoreList } from 'shopify-components-lib';
 
 export default class App extends Component {
   render() {

@@ -1,5 +1,5 @@
 import Button from './elements/Button';
-import StoreList from '../src/containers/StoresList';
+import StoreList from './elements/StoresList';
 
 module.exports = {
   Button,

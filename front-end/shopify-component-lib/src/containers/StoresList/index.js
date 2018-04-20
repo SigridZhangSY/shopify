@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchStoreListAction } from '../../redux/actions/storesListAction';
+import { fetchStoreListAction } from '../../../lib/elements/StoresList/action';
 
 import './styles.css';
 
 const mapStateToProps = (state) => ({
-  stores: state.stores.storesList,
+  stores: state.storesList,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -23,12 +23,12 @@ class StoreList extends Component {
 
     return(
       <div className="stores_list_wrapper">
-        <p className="stores_list_title">Stores List</p>
+        <p className="stores_list_title">Store List</p>
         {stores.length > 0 &&
           <div className="stores_list">
           {
-            stores.map(store => (
-              <div className="store_item">
+            stores.map((store, index) => (
+              <div key={index} className="store_item">
                 <p>{ store.name.toUpperCase() }</p>
               </div>
             ))

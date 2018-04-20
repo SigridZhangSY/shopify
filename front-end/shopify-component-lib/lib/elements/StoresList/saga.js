@@ -1,9 +1,8 @@
 import { take, put, call } from 'redux-saga/effects'
-import { get } from '../../utils/api';
-import * as StoresList from '../reducers/storesListReducer';
+import { get } from '../../../src/utils/api';
 
 
-import { fetchStoreListAction, saveStoresListAction} from '../actions/storesListAction';
+import { fetchStoreListAction, saveStoresListAction} from './action';
 
 export function* fetchStoresListSaga() {
   while(true) {
