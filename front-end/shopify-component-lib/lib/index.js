@@ -3,5 +3,5 @@ import StoreList from './elements/StoresList';
 
 module.exports = {
   Button,
-  StoreList
+  StoreList,
 };

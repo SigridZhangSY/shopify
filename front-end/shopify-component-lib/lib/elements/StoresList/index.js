@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import StoreListComponent from '../../../src/containers/StoresList';
+import StoresListContainer from '../../../src/containers/StoresListContainer';
 
 import { fetchStoresListSaga } from './saga';
 import reducers from './reducer';
@@ -19,11 +19,15 @@ sagaMiddleware.run(fetchStoresListSaga)
 
 class StoresList extends Component {
   render() {
+
+    const { onItemClick } = this.props;
+
     return (
       <Provider store={store}>
-        <StoreListComponent />
+        <StoresListContainer onItemClick={onItemClick}/>
       </Provider>
     )
+
   }
 }
 

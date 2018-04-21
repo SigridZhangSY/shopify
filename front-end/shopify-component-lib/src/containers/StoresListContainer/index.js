@@ -4,31 +4,33 @@ import { fetchStoreListAction } from '../../../lib/elements/StoresList/action';
 
 import './styles.css';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, ownProps) => ({
   stores: state.storesList,
+  onItemClick: ownProps.onItemClick,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   fetchStoreList: () => dispatch(fetchStoreListAction())
 });
 
-class StoreList extends Component {
+class StoresListContainer extends Component {
+
   componentWillMount() {
     const { fetchStoreList } = this.props;
     fetchStoreList();
   }
 
   render() {
-    const { stores } = this.props;
+    const { stores = [], onItemClick } = this.props;
 
     return(
       <div className="stores_list_wrapper">
-        <p className="stores_list_title">Store List</p>
+        <p className="stores_list_title">Stores List</p>
         {stores.length > 0 &&
           <div className="stores_list">
           {
             stores.map((store, index) => (
-              <div key={index} className="store_item">
+              <div key={index} className="store_item" onClick={() => { onItemClick && onItemClick(store.self)}}>
                 <p>{ store.name.toUpperCase() }</p>
               </div>
             ))
@@ -39,4 +41,4 @@ class StoreList extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StoreList);
+export default connect(mapStateToProps, mapDispatchToProps)(StoresListContainer);
