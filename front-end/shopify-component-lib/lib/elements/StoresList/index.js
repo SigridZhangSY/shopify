@@ -20,11 +20,9 @@ sagaMiddleware.run(fetchStoresListSaga)
 class StoresList extends Component {
   render() {
 
-    const { onItemClick } = this.props;
-
     return (
       <Provider store={store}>
-        <StoresListContainer onItemClick={onItemClick}/>
+        <StoresListContainer {...this.props}/>
       </Provider>
     )
 

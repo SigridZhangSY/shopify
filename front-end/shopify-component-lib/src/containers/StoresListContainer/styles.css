@@ -1,26 +1,52 @@
+@import url("https://fonts.googleapis.com/css?family=Work+Sans:300,400,500");
+
 .stores_list_wrapper {
+  font-family: "Work Sans", Arial, sans-serif;
   padding: 10px;
 }
 
 .stores_list_title {
-  font-family: 'PT Sans Caption', Helvetica, Arial, sans-serif;
-  font-size: 70px;
+  font-size: 60px;
+  font-weight: 300;
   display: flex;
   justify-content: center;
+  letter-spacing: 7px;
+  position: relative;
+}
+
+.stores_list_title:after {
+  width: 50px;
+  height: 2px;
+  background: #00CA4C;
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 
 .stores_list {
+  width: 70%;
+  margin: auto;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  border: solid #025aa575 1px;
-  border-radius: 5px;
-  width: 500px;
-  margin: 0 auto;
+  justify-content: center;
 }
 
 .store_item {
-  border-bottom: solid #025aa575 1px;
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.store_item>div {
+  min-width: 300px;
+  height: 200px;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-right: 20px;
 }
 
 .store_item:hover {
@@ -29,10 +55,25 @@
 
 .store_item:last-child {
   border-bottom: none;
+  margin-right: 0;
 }
 
-.store_item p {
-  font-family: 'PT Sans Caption', Helvetica, Arial, sans-serif;
+.store_item .name {
   font-size: 30px;
-  margin: 0 50px;
+  text-align: center;
+  height: 90px;
+  display: table-cell;
+  vertical-align: middle;
+  font-weight: 300;
+  width: 450px;
+}
+
+.store_item img {
+  width: 100%;
+}
+
+.store_item .description {
+  padding: 10px;
+  max-height: 100%;
+  overflow: hidden;
 }

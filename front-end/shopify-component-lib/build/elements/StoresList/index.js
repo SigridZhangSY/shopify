@@ -18,9 +18,9 @@ var _reduxSaga = require('redux-saga');
 
 var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
 
-var _StoresList = require('../../../src/containers/StoresList');
+var _StoresListContainer = require('../../../src/containers/StoresListContainer');
 
-var _StoresList2 = _interopRequireDefault(_StoresList);
+var _StoresListContainer2 = _interopRequireDefault(_StoresListContainer);
 
 var _saga = require('./saga');
 
@@ -57,10 +57,11 @@ var StoresList = function (_Component) {
   _createClass(StoresList, [{
     key: 'render',
     value: function render() {
+
       return _react2.default.createElement(
         _reactRedux.Provider,
         { store: store },
-        _react2.default.createElement(_StoresList2.default, null)
+        _react2.default.createElement(_StoresListContainer2.default, this.props)
       );
     }
   }]);
