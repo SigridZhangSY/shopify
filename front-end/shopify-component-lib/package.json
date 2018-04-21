@@ -4,6 +4,7 @@
   "description": "Simple shopify application",
   "main": "build/index.js",
   "scripts": {
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --port 8080",
     "build": "babel lib -d build",
     "lint": "eslint lib/**; exit 0",
     "lint:watch": "esw -w lib/**",

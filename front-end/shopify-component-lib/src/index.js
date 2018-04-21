@@ -5,7 +5,7 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { fetchStoresListSaga } from './redux/sagas/storeListSaga';
 
-import App from './components/app';
+import ProductsList from '../lib/elements/ProductsList'
 import reducers from './redux/reducers';
 
 const sagaMiddleware = createSagaMiddleware()
@@ -20,6 +20,6 @@ sagaMiddleware.run(fetchStoresListSaga)
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ProductsList />
   </Provider>
   , document.querySelector('.container'));
