@@ -28,7 +28,7 @@ ReactDOM.render(
       <Route path="/" component={App}>
         <IndexRedirect to="stores"/>
         <Route path="/stores" component={StoreListPage}/>
-        <Route path="/stores/:id" component={StorePage} />
+        <Route path="/stores/:storeId" component={StorePage} />
       </Route>
     </Router>
   </Provider>

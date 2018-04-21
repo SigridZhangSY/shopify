@@ -1,0 +1,18 @@
+.store_banner {
+    height: 350px;
+    overflow: hidden;
+}
+
+.store_banner>img {
+    width: 100%;
+}
+.store_banner>p {
+    position: absolute;
+    top: 100px;
+    color: black;
+    background: white;
+    opacity: 0.5;
+    padding: 30px 50px;
+    font-size: 50px;
+    letter-spacing: 10px;
+}
