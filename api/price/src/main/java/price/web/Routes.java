@@ -9,6 +9,6 @@ import java.net.URI;
 public class Routes {
 
     public URI priceUrl(Price price) {
-        return URI.create(String.format("products/%s/prices/%s", price.getProductId(), price.getId()));
+        return URI.create(String.format("/products/%s/prices/%s", price.getProductId(), price.getId()));
     }
 }

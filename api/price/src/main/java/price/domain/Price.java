@@ -81,6 +81,10 @@ public class Price implements Record{
         return new HashMap<String, Object>(){{
             put("value", priceValue);
             put("createdAt", createdAt);
+            put("links", new HashMap<String, Object>(){{
+                put("self", "/products/" + productId + "/price-list/" + id);
+                put("product", "/products/" + productId);
+            }});
         }};
     }
 }
