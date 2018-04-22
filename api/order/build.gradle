@@ -1,0 +1,67 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.0.1.RELEASE")
+        classpath("org.flywaydb:flyway-gradle-plugin:4.0.3")
+//        classpath "io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.flywaydb.flyway'
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.M9'
+    }
+}
+
+def currentEnv = System.getenv()
+
+flyway {
+    driver = 'com.mysql.jdbc.Driver'
+    url = String.format(
+            "jdbc:mysql://%s:%s/%s?user=%s&password=%s&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull",
+            currentEnv.getOrDefault("DB_HOST", "localhost"),
+            currentEnv.getOrDefault("DB_PORT", 3306),
+            currentEnv.getOrDefault("DB_ON_CREATE_DB", "orders"),
+            currentEnv.getOrDefault("DB_MYSQL_USER", "mysql"),
+            currentEnv.getOrDefault("DB_MYSQL_PASS", "mysql"))
+}
+
+bootJar {
+    baseName = 'order'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://repo.spring.io/libs-milestone'
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-jdbc")
+    compile("org.springframework.boot:spring-boot-starter-jersey")
+    compile 'mysql:mysql-connector-java'
+    compile 'org.springframework.cloud:spring-cloud-starter-config'
+    compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+    compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+//    compile 'org.flywaydb:flyway-core'
+    testCompile 'io.rest-assured:spring-mock-mvc'
+    testCompile 'io.rest-assured:rest-assured'
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+}
