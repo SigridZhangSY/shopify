@@ -55,6 +55,7 @@ dependencies {
     compile 'mysql:mysql-connector-java'
     compile 'org.modelmapper:modelmapper:1.1.0'
     compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
 //    compile 'org.flywaydb:flyway-core'
     testCompile 'io.rest-assured:spring-mock-mvc'
