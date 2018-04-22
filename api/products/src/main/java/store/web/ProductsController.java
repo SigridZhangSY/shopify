@@ -35,7 +35,7 @@ public class ProductsController {
     @ResponseBody
     @PostMapping(path = "/stores/{storeId}/products", consumes = "application/json")
     public ResponseEntity<?> createProducts(@PathVariable String storeId, @RequestBody Map<String, Object> payload) {
-        if(!payload.containsKey("description")) {
+        if(!payload.containsKey("description") || !payload.containsKey("name")) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         Optional<Store> store = storeRepository.findById(storeId);
@@ -43,12 +43,10 @@ public class ProductsController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
-        Product product = new Product(payload.get("description").toString(), storeId);
+        Product product = new Product(payload.get("name").toString(), storeId, payload.get("description").toString());
         Product fetch = productRepository.save(product);
 
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{productId}")
-                .buildAndExpand(fetch.getId()).toUri();
+        URI uri = URI.create("/products/" + fetch.getId());
 
         return ResponseEntity.created(uri).build();
     }

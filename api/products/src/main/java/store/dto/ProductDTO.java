@@ -2,12 +2,13 @@ package store.dto;
 
 import store.web.serializer.Record;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ProductDTO implements Record {
     private String id;
+
+    private String productName;
 
     private String description;
 
@@ -17,24 +18,20 @@ public class ProductDTO implements Record {
     @Override
     public Map<String, Object> toRefJson() {
         return new HashMap<String, Object>(){{
-            put("self", "/products/" + id);
+            put("name", productName);
+            put("links", new HashMap<String, Object>(){{
+                put("self", "/products/" + id);
+                put("currentPrice", "/products/" + id + "/current-price");
+                put("store", "/stores/" + storeId);
+            }});
         }};
     }
 
     @Override
     public Map<String, Object> toJson() {
-        return new HashMap<String, Object>(){{
-            put("description", description);
-            put("links", new HashMap<String, Object>(){{
-                put("self", new HashMap<String, Object>(){{
-                    put("href", "/products/" + id);
-                }});
-                put("store", new HashMap<String, Object>(){{
-                    put("href", "/stores/" + storeId);
-                }});
-            }});
-
-        }};
+        Map map = toRefJson();
+        map.put("description", description);
+        return map;
     }
 
     public String getId() {
@@ -59,5 +56,13 @@ public class ProductDTO implements Record {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }

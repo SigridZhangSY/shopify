@@ -6,8 +6,9 @@ import java.util.Map;
 import static org.hamcrest.Matchers.containsString;
 
 public class TestHelper {
-    public static Map<String, Object> productMap(String description) {
+    public static Map<String, Object> productMap(String name, String description) {
         return new HashMap<String, Object>() {{
+            put("name", name);
             put("description", description);
         }};
     }

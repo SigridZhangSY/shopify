@@ -42,10 +42,10 @@ public class ProductsControllerTest extends ApiUnitTest {
 
     @Test
     public void should_201_when_create_product() throws Exception {
-        Map<String, Object> productMap = TestHelper.productMap("Detective Fic");
+        Map<String, Object> productMap = TestHelper.productMap("Casebook of Sherlock Holmes", "Detective Fic");
         Store store = new Store("owner-id", "book store");
         String storeId = store.getId();
-        Product product = new Product("Detective Fic", storeId);
+        Product product = new Product("Detective Fic", storeId, "Casebook of Sherlock Holmes");
 
         when(mockStoreRepository.findById(eq(storeId))).thenReturn(Optional.of(store));
         when(mockProductRepository.save(any())).thenReturn(product);
@@ -58,14 +58,16 @@ public class ProductsControllerTest extends ApiUnitTest {
                 .post("/stores/" + storeId + "/products")
                 .then()
                 .statusCode(HttpStatus.SC_CREATED)
-                .headers(TestHelper.headerMap("/stores/" + storeId + "/products/" + product.getId()));
+                .headers(TestHelper.headerMap("/products/" + product.getId()));
     }
 
     @Test
     public void should_200_when_get_products_of_store() throws Exception {
         Store store = new Store("owner-id", "book store");
         String storeId = store.getId();
-        Product product = new Product("Detective Fic", storeId);
+        String description = "Detective Fic";
+        String name = "Casebook of Sherlock Holmes";
+        Product product = new Product(name, storeId, description);
 
         when(mockStoreRepository.findById(eq(storeId))).thenReturn(Optional.of(store));
         when(mockProductRepository.findByStoreId(eq(storeId))).thenReturn(new ArrayList<Product>(){{
@@ -78,13 +80,18 @@ public class ProductsControllerTest extends ApiUnitTest {
                 .get("/stores/" + storeId + "/products")
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("items.self", hasItems("/products/" + product.getId()));
+                .body("items.name", hasItems(name))
+                .body("items.links.self", hasItems("/products/" + product.getId()))
+                .body("items.links.currentPrice", hasItems("/products/" + product.getId() + "/current-price"))
+                .body("items.links.store", hasItems("/stores/" + storeId));
     }
 
     @Test
     public void should_200_when_get_product_by_id() throws Exception {
         String storeId = "storeId";
-        Product product = new Product("Detective Fic", storeId);
+        String description = "Detective Fic";
+        String name = "Casebook of Sherlock Holmes";
+        Product product = new Product(name, storeId, description);
 
         when(mockProductRepository.findById(eq(product.getId()))).thenReturn(Optional.of(product));
 
@@ -94,8 +101,10 @@ public class ProductsControllerTest extends ApiUnitTest {
                 .get("/products/" + product.getId())
                 .then()
                 .statusCode(HttpStatus.SC_OK)
-                .body("description", equalTo("Detective Fic"))
-                .body("links.self.href", equalTo("/products/" + product.getId()))
-                .body("links.store.href", equalTo("/stores/" + storeId));
+                .body("name", equalTo(name))
+                .body("description", equalTo(description))
+                .body("links.self", equalTo("/products/" + product.getId()))
+                .body("links.currentPrice", equalTo("/products/" + product.getId() + "/current-price"))
+                .body("links.store", equalTo("/stores/" + storeId));
     }
 }

@@ -11,14 +11,17 @@ public class Product {
     @Id
     private String id;
 
+    private String productName;
+
     private String description;
 
     private String storeId;
 
-    public Product(String description, String storeId) {
+    public Product(String productName, String storeId, String description) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.description = description;
         this.storeId = storeId;
+        this.productName = productName;
     }
 
     public Product() {
@@ -42,5 +45,13 @@ public class Product {
 
     public void setStoreId(String storeId) {
         this.storeId = storeId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 }
