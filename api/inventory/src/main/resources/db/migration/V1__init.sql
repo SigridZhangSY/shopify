@@ -2,7 +2,7 @@ CREATE TABLE inventory_requests (
   id VARCHAR(255) PRIMARY KEY,
   amount INT NOT NULL,
   request_type VARCHAR(255) NOT NULL,
-  order_item_id VARCHAR(255),
+  order_item_url VARCHAR(255),
   product_id VARCHAR(255) NOT NULL,
   created_at TIMESTAMP
 );

@@ -5,14 +5,13 @@ import inventory.domain.InventoryRequest;
 import inventory.domain.InventoryRequestType;
 import inventory.repository.InventoryRepository;
 import inventory.repository.InventoryRequestRepository;
+import inventory.web.serializer.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -34,7 +33,7 @@ public class InventoryResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("inventory-request")
+    @Path("inventory-requests")
     public Response createInventoryRequest(Map<String, Object> info) {
         int amount = Integer.parseInt(info.get("amount").toString());
         InventoryRequestType type = InventoryRequestType.valueOf(info.get("type").toString());
@@ -66,8 +65,8 @@ public class InventoryResource {
             if (amountResult < 0) {
                 throw  new BadRequestException();
             }
-            String orderItemId = info.get("orderItemId").toString();
-            InventoryRequest inventoryRequest = new InventoryRequest(productId, amount, orderItemId, type);
+            String orderItemUrl = info.get("orderItemUrl").toString();
+            InventoryRequest inventoryRequest = new InventoryRequest(productId, amount, orderItemUrl, type);
             Inventory inventory = new Inventory(productId, amountResult, inventoryRequest);
             inventoryRequest.setInventory(inventory);
             InventoryRequest fetch = inventoryRequestRepository.save(inventoryRequest);
@@ -78,5 +77,13 @@ public class InventoryResource {
 
         throw  new BadRequestException();
 
+    }
+
+    @GET
+    @Path("inventory-requests")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Page<InventoryRequest> getInventoryRequestsList() {
+        List<InventoryRequest> inventoryRequests = inventoryRequestRepository.findByProductIdOrOrderByCreatedAtDesc(productId);
+        return new Page(inventoryRequests);
     }
 }
