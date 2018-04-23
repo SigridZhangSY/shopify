@@ -1,13 +1,17 @@
 package inventory.domain;
 
 
+import inventory.web.serializer.Record;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
 @Table(name = "inventory")
-public class Inventory {
+public class Inventory implements Record {
     @Id
     private String id;
 
@@ -70,5 +74,22 @@ public class Inventory {
 
     public void setProductId(String productId) {
         this.productId = productId;
+    }
+
+    @Override
+    public Map<String, Object> toRefJson() {
+        return toJson();
+    }
+
+    @Override
+    public Map<String, Object> toJson() {
+        return new HashMap<String, Object>(){{
+            put("amount", amount);
+            put("created_at", createdAt);
+            put("links", new HashMap<String, Object>(){{
+                put("self", "/products/" + productId + "/inventory-list/" + id);
+                put("inventory-request", "/products/" + productId + "/inventory-requests/" + inventoryRequest.getId());
+            }});
+        }};
     }
 }

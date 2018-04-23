@@ -86,4 +86,14 @@ public class InventoryResource {
         List<InventoryRequest> inventoryRequests = inventoryRequestRepository.findByProductIdOrOrderByCreatedAtDesc(productId);
         return new Page(inventoryRequests);
     }
+
+    @GET
+    @Path("current-inventory")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Inventory getCurrentInventory() {
+        Optional<Inventory> currentInventory = inventoryRepository.findFirstByProductIdOrderByCreatedAtDesc(productId);
+        return currentInventory.orElseGet(() -> {
+            throw new NotFoundException("current inventory");
+        });
+    }
 }

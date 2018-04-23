@@ -15,14 +15,13 @@ import org.junit.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
@@ -34,23 +33,36 @@ public class InventoryResourceTest extends ApiTest{
     @MockBean
     private InventoryRequestRepository inventoryRequestRepository;
 
+    @MockBean
+    private InventoryRepository inventoryRepository;
+
     private String productId;
+
+    private List<InventoryRequest> inventoryRequestList;
+
+    private int amount;
+
+    private InventoryRequest inventoryRequest;
+
+    private Inventory inventory;
 
     @Before
     public void setUp() throws Exception {
         productId = "product001";
         Map productMap = new HashMap<String, Object>();
         when(productsClient.getProduct(eq(productId))).thenReturn(productMap);
+
+        amount = 50;
+        inventoryRequest = new InventoryRequest(productId, amount, InventoryRequestType.INCREASE);
+        inventoryRequest.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        inventory = new Inventory(productId, amount, inventoryRequest);
+        inventory.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        inventoryRequest.setInventory(inventory);
+        inventoryRequestList = new ArrayList<InventoryRequest>(){{ add(inventoryRequest); }};
     }
 
     @Test
     public void should_201_when_create_inventory_request() throws Exception {
-        int amount = 50;
-        InventoryRequest inventoryRequest = new InventoryRequest(productId, amount, InventoryRequestType.INCREASE);
-        inventoryRequest.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        Inventory inventory = new Inventory(productId, amount, inventoryRequest);
-        inventoryRequest.setInventory(inventory);
-        List<InventoryRequest> inventoryRequestList = new ArrayList<InventoryRequest>(){{ add(inventoryRequest); }};
         when(inventoryRequestRepository.save(any())).thenReturn(inventoryRequestList);
 
         Map<String, Object> inventoryRequestMap = TestHelper.increaseInventoryRequestMap(amount);
@@ -67,12 +79,6 @@ public class InventoryResourceTest extends ApiTest{
 
     @Test
     public void should_200_when_get_inventory_list_of_product() throws Exception {
-        int amount = 50;
-        InventoryRequest inventoryRequest = new InventoryRequest(productId, amount, InventoryRequestType.INCREASE);
-        inventoryRequest.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        Inventory inventory = new Inventory(productId, amount, inventoryRequest);
-        inventoryRequest.setInventory(inventory);
-        List<InventoryRequest> inventoryRequestList = new ArrayList<InventoryRequest>(){{ add(inventoryRequest); }};
         when(inventoryRequestRepository.findByProductIdOrOrderByCreatedAtDesc(eq(productId))).thenReturn(inventoryRequestList);
 
         given()
@@ -86,5 +92,22 @@ public class InventoryResourceTest extends ApiTest{
                 .body("items.type", hasItems(InventoryRequestType.INCREASE.toString()))
                 .body("items.created_at", hasItems(notNullValue()))
                 .body("items.links.self", hasItems("/products/" + productId + "/inventory-requests/" + inventoryRequest.getId()));
+    }
+
+    @Test
+    public void should_200_when_get_current_inventory_of_product() throws Exception {
+        when(inventoryRepository.findFirstByProductIdOrderByCreatedAtDesc(productId)).thenReturn(Optional.of(inventory));
+
+        given()
+                .port(port)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/products/" + productId + "/current-inventory")
+                .then()
+                .statusCode(HttpStatus.SC_OK)
+                .body("amount", is(50))
+                .body("created_at", is(notNullValue()))
+                .body("links.self", is("/products/" + productId + "/inventory-list/" + inventory.getId()))
+                .body("links.inventory-request", is("/products/" + productId + "/inventory-requests/" + inventoryRequest.getId()));
     }
 }
