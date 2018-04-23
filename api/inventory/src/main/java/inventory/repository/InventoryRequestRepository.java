@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface InventoryRequestRepository extends JpaRepository <InventoryRequest, String> {
-    List<InventoryRequest> findByProductIdOrOrderByCreatedAtDesc(String productId);
+    List<InventoryRequest> findByProductIdOrderByCreatedAtDesc(String productId);
 }

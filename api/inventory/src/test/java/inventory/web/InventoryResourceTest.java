@@ -79,7 +79,7 @@ public class InventoryResourceTest extends ApiTest{
 
     @Test
     public void should_200_when_get_inventory_list_of_product() throws Exception {
-        when(inventoryRequestRepository.findByProductIdOrOrderByCreatedAtDesc(eq(productId))).thenReturn(inventoryRequestList);
+        when(inventoryRequestRepository.findByProductIdOrderByCreatedAtDesc(eq(productId))).thenReturn(inventoryRequestList);
 
         given()
                 .port(port)

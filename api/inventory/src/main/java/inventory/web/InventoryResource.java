@@ -83,7 +83,7 @@ public class InventoryResource {
     @Path("inventory-requests")
     @Produces(MediaType.APPLICATION_JSON)
     public Page<InventoryRequest> getInventoryRequestsList() {
-        List<InventoryRequest> inventoryRequests = inventoryRequestRepository.findByProductIdOrOrderByCreatedAtDesc(productId);
+        List<InventoryRequest> inventoryRequests = inventoryRequestRepository.findByProductIdOrderByCreatedAtDesc(productId);
         return new Page(inventoryRequests);
     }
 
