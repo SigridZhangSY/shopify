@@ -67,3 +67,63 @@ services:
       SERVICE_NAME: "price-service"
       EUREKA_HOST: eureka
       EUREKA_PORT: "8761"
+  inventory_db:
+    image: mysql
+    container_name: inventory-db
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysql"
+      MYSQL_USER: "mysql"
+      MYSQL_PASSWORD: "mysql"
+      MYSQL_DATABASE: "shopify"
+    volumes:
+      - ./migration/inventory:/docker-entrypoint-initdb.d/:ro
+    expose:
+      - 3306
+  inventory_web:
+    image: inventory_image:latest
+    container_name: inventory-web
+    depends_on:
+      - inventory_db
+      - eureka_server
+    ports:
+     - 8883:8081
+    environment:
+      DB_HOST: inventory-db
+      DB_PORT: "3306"
+      DB_MYSQL_USER: "mysql"
+      DB_MYSQL_PASS: "mysql"
+      STAGE: "prod"
+      DB_ON_CREATE_DB: "shopify"
+      SERVICE_NAME: "inventory-service"
+      EUREKA_HOST: eureka
+      EUREKA_PORT: "8761"
+  order_db:
+    image: mysql
+    container_name: order-db
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysql"
+      MYSQL_USER: "mysql"
+      MYSQL_PASSWORD: "mysql"
+      MYSQL_DATABASE: "shopify"
+    volumes:
+      - ./migration/order:/docker-entrypoint-initdb.d/:ro
+    expose:
+      - 3306
+  order_web:
+    image: order_image:latest
+    container_name: order-web
+    depends_on:
+      - order_db
+      - eureka_server
+    ports:
+     - 8884:8081
+    environment:
+      DB_HOST: order-db
+      DB_PORT: "3306"
+      DB_MYSQL_USER: "mysql"
+      DB_MYSQL_PASS: "mysql"
+      STAGE: "prod"
+      DB_ON_CREATE_DB: "shopify"
+      SERVICE_NAME: "orders-service"
+      EUREKA_HOST: eureka
+      EUREKA_PORT: "8761"

@@ -82,7 +82,7 @@
 
 — API
 
-- /products/{pid}/inventory-list       post`15`      get`10`
+- /products/{pid}/inventory-list      get`10`
 - /products/{pid}/current-inventory          get`10`
 - /products/{pid}/inventory-requests  post`15`    get`10`
 
