@@ -1,5 +1,6 @@
 package order.web;
 
+import order.depend.InventoryClient;
 import order.depend.PriceClient;
 import order.domain.Order;
 import order.domain.OrderItem;
@@ -13,6 +14,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,9 @@ public class OrdersResource {
 
     @Autowired
     private PriceClient priceClient;
+
+    @Autowired
+    private InventoryClient inventoryClient;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -45,11 +50,27 @@ public class OrdersResource {
                     throw new BadRequestException("orderItem map should contain productId and count");
                 }
                 String productId = itemMap.get("productId").toString();
+
                 Map currentPrice = priceClient.getCurrentPriceOfProduct(productId);
                 Float priceValue = Float.valueOf(currentPrice.get("value").toString());
                 String priceUrl = ((Map) currentPrice.get("links")).get("self").toString();
+
+                Map currentInventory = inventoryClient.getCurrentInventoryOfProduct(productId);
+                int inventory = Integer.parseInt(currentInventory.get("amount").toString());
                 int count = Integer.parseInt(itemMap.get("count").toString());
+
+                if( inventory < count) {
+                    throw new BadRequestException("shortage of inventory");
+                }
+
                 OrderItem orderItem = new OrderItem(order, priceUrl, priceValue, count);
+                HashMap<String, Object> inventoryRequestMap = new HashMap<String, Object>() {{
+                    put("amount", count);
+                    put("type", "REDUCE");
+                    put("orderItemUrl", routes.orderItemUrl(orderItem));
+                }};
+                inventoryClient.createInventoryRequestOfProduct(productId, inventoryRequestMap);
+
                 order.addOrderItem(orderItem);
             });
 

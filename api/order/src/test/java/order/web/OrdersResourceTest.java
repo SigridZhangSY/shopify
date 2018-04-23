@@ -1,6 +1,7 @@
 package order.web;
 
 import io.restassured.http.ContentType;
+import order.depend.InventoryClient;
 import order.depend.PriceClient;
 import order.domain.Order;
 import order.domain.OrderItem;
@@ -9,7 +10,6 @@ import order.support.ApiTest;
 import order.support.TestHelper;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static io.restassured.RestAssured.given;
@@ -27,6 +27,9 @@ public class OrdersResourceTest extends ApiTest {
     @MockBean
     private PriceClient mockPriceClient;
 
+    @MockBean
+    private InventoryClient mockInventoryClient;
+
     @Test
     public void should_201_when_create_order() throws Exception {
         String userId = "user-id";
@@ -40,6 +43,10 @@ public class OrdersResourceTest extends ApiTest {
             }});
         }};
 
+        HashMap<String, Object> currentInventoryMap = new HashMap<String, Object>() {{
+            put("amount", 10);
+        }};
+
         int count = 5;
         Map<String, Object> orderMap = TestHelper.orderMap(userId, productId, count);
         Order order = new Order(userId);
@@ -47,6 +54,8 @@ public class OrdersResourceTest extends ApiTest {
         order.addOrderItem(orderItem);
         when(mockOrderRepository.save(any())).thenReturn(order);
         when(mockPriceClient.getCurrentPriceOfProduct(eq(productId))).thenReturn(priceMap);
+        when(mockInventoryClient.getCurrentInventoryOfProduct(eq(productId))).thenReturn(currentInventoryMap);
+        when(mockInventoryClient.createInventoryRequestOfProduct(any(), any())).thenReturn(new HashMap());
 
         given()
                 .port(port)
