@@ -1,5 +1,6 @@
 package order.web;
 
+import order.depend.PriceClient;
 import order.domain.Order;
 import order.domain.OrderItem;
 import order.repository.OrderRepository;
@@ -25,6 +26,9 @@ public class OrdersResource {
     @Autowired
     private Routes routes;
 
+    @Autowired
+    private PriceClient priceClient;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createOrder(Map<String, Object> info){
@@ -37,14 +41,21 @@ public class OrdersResource {
         if(orderItemsMap.size() > 0) {
             Order order = new Order(userId);
             orderItemsMap.stream().forEach(itemMap -> {
-                if(!itemMap.containsKey("productPriceUrl") || !itemMap.containsKey("amount")) {
-                    throw new BadRequestException("orderItem map should contain productPriceUrl and amount");
+                if(!itemMap.containsKey("productId") || !itemMap.containsKey("count")) {
+                    throw new BadRequestException("orderItem map should contain productId and count");
                 }
-                String priceUrl = itemMap.get("productPriceUrl").toString();
-                int amount = Integer.parseInt(itemMap.get("amount").toString());
-                OrderItem orderItem = new OrderItem(order, priceUrl, amount);
+                String productId = itemMap.get("productId").toString();
+                Map currentPrice = priceClient.getCurrentPriceOfProduct(productId);
+                Float priceValue = Float.valueOf(currentPrice.get("value").toString());
+                String priceUrl = ((Map) currentPrice.get("links")).get("self").toString();
+                int count = Integer.parseInt(itemMap.get("count").toString());
+                OrderItem orderItem = new OrderItem(order, priceUrl, priceValue, count);
                 order.addOrderItem(orderItem);
             });
+
+            Float totalAmount = order.getOrderItems().stream().map(orderItem -> orderItem.getProductPrice() * orderItem.getProductCount())
+                    .reduce(0f, (sum, amount) -> sum + amount);
+            order.setAmount(totalAmount);
             Order fetch = orderRepository.save(order);
             return Response.created(routes.orderUrl(fetch)).build();
         } else {

@@ -14,18 +14,21 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    private String productPrice;
+    private String productPriceUrl;
 
-    private int amount;
+    private float productPrice;
+
+    private int productCount;
 
     @Column(name = "created_at",insertable = false,updatable = false,columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp createdAt;
 
-    public OrderItem(Order order, String productPrice, int amount) {
+    public OrderItem(Order order, String productPriceUrl, float productPrice, int productCount) {
         this.id = UUID.randomUUID().toString().replace("-", "");
         this.order = order;
+        this.productPriceUrl = productPriceUrl;
         this.productPrice = productPrice;
-        this.amount = amount;
+        this.productCount = productCount;
     }
 
     public OrderItem() {
@@ -47,12 +50,12 @@ public class OrderItem {
         this.order = order;
     }
 
-    public String getProductPrice() {
-        return productPrice;
+    public String getProductPriceUrl() {
+        return productPriceUrl;
     }
 
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
+    public void setProductPriceUrl(String productPriceUrl) {
+        this.productPriceUrl = productPriceUrl;
     }
 
     public Timestamp getCreatedAt() {
@@ -63,11 +66,19 @@ public class OrderItem {
         this.createdAt = createdAt;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getProductCount() {
+        return productCount;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setProductCount(int productCount) {
+        this.productCount = productCount;
+    }
+
+    public float getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(float productPrice) {
+        this.productPrice = productPrice;
     }
 }
